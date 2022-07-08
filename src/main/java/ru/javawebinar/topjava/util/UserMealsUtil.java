@@ -3,11 +3,11 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExcess;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class UserMealsUtil {
     public static void main(String[] args) {
@@ -29,11 +29,27 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         // TODO return filtered list with excess. Implement by cycles
-        System.out.println("TODO return filtered list with excess. Implement by cycles");
-        return null;
+        List<UserMealWithExcess> userMealWithExcessList = new ArrayList<>();
+        Map<LocalDate, Integer> dateUserMealWithExcessMap = new HashMap<>();
+
+        for (UserMeal meal : meals) {
+            LocalDate date = LocalDate.from(meal.getDateTime());
+            int calories = meal.getCalories();
+            dateUserMealWithExcessMap.merge(date, calories, Integer::sum);
+        }
+
+        for (UserMeal meal : meals) {
+            LocalDateTime dateTime = meal.getDateTime();
+            boolean flag = dateUserMealWithExcessMap.get(dateTime.toLocalDate()) > caloriesPerDay;
+            if (TimeUtil.isBetweenHalfOpen(dateTime.toLocalTime(), startTime, endTime)) {
+                userMealWithExcessList.add(new UserMealWithExcess(dateTime, meal.getDescription(), meal.getCalories(), flag));
+            }
+        }
+        return userMealWithExcessList;
     }
 
-    public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime
+            startTime, LocalTime endTime, int caloriesPerDay) {
         // TODO Implement by streams
         return null;
     }
