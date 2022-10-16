@@ -5,14 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -45,7 +43,7 @@ public class MealRestController {
         int userId = SecurityUtil.authUserId();
         checkNew(meal);
         log.info("create {} for user{}", meal, userId);
-        return service.create(meal,userId);
+        return service.create(meal, userId);
     }
 
     public void delete(int id) {
@@ -61,8 +59,8 @@ public class MealRestController {
         service.update(meal, userId);
     }
 
-    public List<MealTo> getBetweenHalfOpen (@Nullable LocalDate startDate, @Nullable LocalTime startTime,
-                                            @Nullable LocalDate endDate, @Nullable LocalTime endTime){
+    public List<MealTo> getBetweenHalfOpen(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
+                                           @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
         int userId = SecurityUtil.authUserId();
         log.info("getBetween dates({} - {}) time({} - {}) for user {}", startDate, endDate, startTime, endTime, userId);
         List<Meal> mealDateFiltered = service.getBetweenHalfOpen(startDate, endDate, userId);
